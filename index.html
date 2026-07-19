@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AwardLink — Custom Medal Production Partner | Yiwu, China</title>
+    <meta name="description" content="AwardLink: Custom zinc alloy medal production partner for trophy shops and awards distributors. Flexible quantities, white-label ready, 24-hour design review. Based in Yiwu, China.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: '#1a365d',
+                            800: '#243e6f',
+                            700: '#2e5088',
+                        },
+                        gold: {
+                            DEFAULT: '#b8860b',
+                            light: '#d4a745',
+                        },
+                        slate: {
+                            DEFAULT: '#475569',
+                            light: '#cbd5e1',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #1a365d 0%, #0f243e 40%, #1a365d 100%);
+            position: relative;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(184,134,11,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(184,134,11,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .geometric-overlay {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            background-image:
+                linear-gradient(30deg, #cbd5e1 1px, transparent 1px),
+                linear-gradient(-30deg, #cbd5e1 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+        .accent-line {
+            width: 48px;
+            height: 3px;
+            background: #b8860b;
+            border-radius: 2px;
+        }
+        .accent-line.center {
+            margin: 0 auto;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .process-line {
+            position: absolute;
+            top: 28px;
+            left: calc(50% + 40px);
+            width: calc(100% - 80px);
+            height: 2px;
+            background: linear-gradient(90deg, #b8860b, #475569);
+            display: none;
+        }
+        @media (min-width: 768px) {
+            .process-line { display: block; }
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #b8860b;
+            box-shadow: 0 0 0 2px rgba(184,134,11,0.2);
+        }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 500;
+            z-index: 9999;
+            animation: slideIn 0.3s ease-out;
+        }
+        .toast-success { background: #15803d; }
+        .toast-error { background: #991b1b; }
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-[#1a365d] text-slate-light font-sans">
+
+    <!-- ============ NAVBAR ============ -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between transition-all duration-300">
+        <div class="flex items-center gap-2">
+            <span class="text-xl font-extrabold text-white tracking-tight">Award<span class="text-gold">Link</span></span>
+        </div>
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-light">
+            <a href="#capabilities" class="hover:text-gold transition-colors">Capabilities</a>
+            <a href="#why-us" class="hover:text-gold transition-colors">Why Us</a>
+            <a href="#process" class="hover:text-gold transition-colors">Process</a>
+            <a href="#about" class="hover:text-gold transition-colors">About</a>
+            <a href="#quote" class="px-4 py-2 bg-gold text-white rounded-lg hover:bg-gold-light transition-colors text-sm font-semibold">Request Quote</a>
+        </div>
+        <!-- Mobile menu button -->
+        <button id="mobileMenuBtn" class="md:hidden text-slate-light hover:text-white text-2xl" aria-label="Menu">☰</button>
+    </nav>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 bg-navy bg-opacity-98 flex flex-col items-center justify-center gap-8 text-lg font-medium hidden">
+        <button id="mobileCloseBtn" class="absolute top-6 right-6 text-slate-light hover:text-white text-3xl" aria-label="Close">✕</button>
+        <a href="#capabilities" class="text-slate-light hover:text-gold transition-colors mobile-link">Capabilities</a>
+        <a href="#why-us" class="text-slate-light hover:text-gold transition-colors mobile-link">Why Us</a>
+        <a href="#process" class="text-slate-light hover:text-gold transition-colors mobile-link">Process</a>
+        <a href="#about" class="text-slate-light hover:text-gold transition-colors mobile-link">About</a>
+        <a href="#quote" class="px-6 py-3 bg-gold text-white rounded-lg hover:bg-gold-light transition-colors mobile-link">Request Quote</a>
+    </div>
+
+    <!-- ============ HERO ============ -->
+    <section id="hero" class="hero-bg min-h-screen flex items-center relative overflow-hidden">
+        <div class="geometric-overlay"></div>
+        <div class="max-w-4xl mx-auto px-6 py-32 relative z-10">
+            <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-4">Yiwu, China</p>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
+                Custom Medal<br class="md:hidden"> Production Partner
+            </h1>
+            <p class="text-lg md:text-xl text-slate mb-8 max-w-2xl leading-relaxed">
+                From simple 2D event medals to complex 3D designs. Built for trophy shops &amp; awards distributors who need a reliable production partner—without the factory overhead.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                <a href="#quote" class="px-8 py-4 bg-gold text-white font-semibold rounded-lg hover:bg-gold-light transition-all text-center text-lg">
+                    Request a Quote →
+                </a>
+                <a href="#capabilities" class="px-8 py-4 border-2 border-slate text-slate-light font-semibold rounded-lg hover:border-gold hover:text-gold transition-all text-center text-lg">
+                    See Our Capabilities ↓
+                </a>
+            </div>
+            <p class="text-sm text-slate">Sample orders welcome · Flexible quantities from trial to bulk · Yiwu, China</p>
+        </div>
+    </section>
+
+    <!-- ============ CAPABILITIES ============ -->
+    <section id="capabilities" class="py-24 px-6 bg-[#0f243e]">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16 fade-up">
+                <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">What We Make</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Zinc Alloy Medals, Your Design</h2>
+                <div class="accent-line center"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-navy-800 rounded-xl p-8 card-hover border border-[#2e5088] fade-up">
+                    <span class="text-4xl mb-4 block">🏅</span>
+                    <h3 class="text-xl font-bold text-white mb-2">2D &amp; 3D Relief Medals</h3>
+                    <p class="text-slate">Your artwork, precision-cast in zinc alloy. From simple flat relief to deep sculpted 3D designs with fine detail.</p>
+                </div>
+                <div class="bg-navy-800 rounded-xl p-8 card-hover border border-[#2e5088] fade-up">
+                    <span class="text-4xl mb-4 block">🎨</span>
+                    <h3 class="text-xl font-bold text-white mb-2">Soft Enamel &amp; UV Print</h3>
+                    <p class="text-slate">Vibrant full-color custom designs with smooth enamel fills or high-resolution UV printing—no minimum.</p>
+                </div>
+                <div class="bg-navy-800 rounded-xl p-8 card-hover border border-[#2e5088] fade-up">
+                    <span class="text-4xl mb-4 block">✨</span>
+                    <h3 class="text-xl font-bold text-white mb-2">Special Finishes</h3>
+                    <p class="text-slate">Antique plating, mirror polish, epoxy dome coating, cut-out shapes, textured surfaces—the details that sell.</p>
+                </div>
+                <div class="bg-navy-800 rounded-xl p-8 card-hover border border-[#2e5088] fade-up">
+                    <span class="text-4xl mb-4 block">🔧</span>
+                    <h3 class="text-xl font-bold text-white mb-2">Custom Structures</h3>
+                    <p class="text-slate">Spinners, bottle openers, multi-layer medals, irregular shapes. Send us your idea—if it can be cast, we'll find a way.</p>
+                </div>
+            </div>
+            <p class="text-center text-slate mt-10 text-sm fade-up">Not sure what's possible? Send us your artwork—we'll tell you in 24 hours.</p>
+        </div>
+    </section>
+
+    <!-- ============ WHY US ============ -->
+    <section id="why-us" class="py-24 px-6 bg-navy">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16 fade-up">
+                <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Why AwardLink</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Built for Your Business</h2>
+                <div class="accent-line center"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="text-center fade-up">
+                    <div class="w-16 h-16 bg-gold bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-3">Flexible Quantities</h3>
+                    <p class="text-slate text-sm leading-relaxed">From a 50-piece trial order to a 50,000-piece tournament run. We scale with you—no rigid MOQ walls.</p>
+                </div>
+                <div class="text-center fade-up">
+                    <div class="w-16 h-16 bg-gold bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-3">White-Label Ready</h3>
+                    <p class="text-slate text-sm leading-relaxed">Your brand. Your packaging. Your customer relationship. We stay behind the scenes—no AwardLink branding on your products.</p>
+                </div>
+                <div class="text-center fade-up">
+                    <div class="w-16 h-16 bg-gold bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-3">Fast Design Feedback</h3>
+                    <p class="text-slate text-sm leading-relaxed">Send your artwork—we'll evaluate producibility and quote within 24 hours. No vague estimates, no runaround.</p>
+                </div>
+            </div>
+            <!-- Trust banner -->
+            <div class="bg-navy-800 border border-[#2e5088] rounded-xl px-8 py-10 text-center fade-up">
+                <p class="text-lg md:text-xl text-slate-light font-medium italic">
+                    "We don't own a factory floor. <span class="text-gold">We own the supply chain</span> that gets your medals made right."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PROCESS ============ -->
+    <section id="process" class="py-24 px-6 bg-[#0f243e]">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16 fade-up">
+                <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">How It Works</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">From Artwork to Delivery</h2>
+                <div class="accent-line center"></div>
+            </div>
+            <div class="relative grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="process-line"></div>
+                <div class="text-center fade-up relative z-10">
+                    <div class="w-14 h-14 bg-navy rounded-full border-2 border-gold flex items-center justify-center mx-auto mb-5">
+                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">1. Send Artwork</h4>
+                    <p class="text-slate text-sm">Share your design file, sketch, or reference photo. Any format works.</p>
+                </div>
+                <div class="text-center fade-up relative z-10">
+                    <div class="w-14 h-14 bg-navy rounded-full border-2 border-gold flex items-center justify-center mx-auto mb-5">
+                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">2. Design Review</h4>
+                    <p class="text-slate text-sm">We assess producibility and send you a detailed quote—within 24 hours.</p>
+                </div>
+                <div class="text-center fade-up relative z-10">
+                    <div class="w-14 h-14 bg-navy rounded-full border-2 border-gold flex items-center justify-center mx-auto mb-5">
+                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">3. Sample Approval</h4>
+                    <p class="text-slate text-sm">We produce a physical sample. You approve it before production begins.</p>
+                </div>
+                <div class="text-center fade-up relative z-10">
+                    <div class="w-14 h-14 bg-navy rounded-full border-2 border-gold flex items-center justify-center mx-auto mb-5">
+                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                    </div>
+                    <h4 class="text-white font-bold mb-2">4. Delivery</h4>
+                    <p class="text-slate text-sm">Production → quality check → shipped from Yiwu. Full tracking provided.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ ABOUT / PRODUCTION NETWORK ============ -->
+    <section id="about" class="py-24 px-6 bg-navy">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16 fade-up">
+                <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">About</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Your Partner, Not Your Competition</h2>
+                <div class="accent-line center"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+                <div class="fade-up">
+                    <h3 class="text-xl font-bold text-white mb-4">Who We Work With</h3>
+                    <p class="text-slate mb-6 leading-relaxed">
+                        AwardLink is built for <span class="text-slate-light font-medium">trophy shops, awards distributors, event companies, and promotional product resellers</span>—businesses that sell medals to their own customers.
+                    </p>
+                    <p class="text-slate leading-relaxed">
+                        We don't sell to end customers. We don't build our own brand on your products. We exist to make <em>your</em> medal orders happen—on time, on spec, on budget.
+                    </p>
+                </div>
+                <div class="fade-up">
+                    <h3 class="text-xl font-bold text-white mb-4">How Production Works</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-gold text-lg mt-0.5">✓</span>
+                            <span class="text-slate"><strong class="text-slate-light">Your branding</strong> — white-label shipping, your packaging and tags.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-gold text-lg mt-0.5">✓</span>
+                            <span class="text-slate"><strong class="text-slate-light">Your designs</strong> — send artwork, we assess producibility within 24 hours.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-gold text-lg mt-0.5">✓</span>
+                            <span class="text-slate"><strong class="text-slate-light">Our network</strong> — Yiwu supply chain, from casting to finishing. We don't claim a factory. We commit to delivery quality.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-gold text-lg mt-0.5">✓</span>
+                            <span class="text-slate"><strong class="text-slate-light">Drop-shipping available</strong> — we ship directly to your customer.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bg-navy-800 border border-[#2e5088] rounded-xl px-8 py-10 text-center fade-up">
+                <p class="text-lg md:text-xl text-slate-light font-medium italic">
+                    "We don't own a factory floor. <span class="text-gold">We own the supply chain</span> that gets your medals made right."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ QUOTE + FOOTER ============ -->
+    <section id="quote" class="py-24 px-6 bg-[#0f243e]">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16 fade-up">
+                <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Get Started</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Request a Quote</h2>
+                <div class="accent-line center"></div>
+                <p class="text-slate mt-4 max-w-lg mx-auto">Tell us what you're looking for. We'll evaluate your design and respond within 24 hours.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-12 fade-up">
+                <!-- Form -->
+                <div class="md:col-span-3">
+                    <form id="quoteForm" class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-light mb-2">Name *</label>
+                            <input type="text" name="name" required
+                                class="w-full px-4 py-3 bg-navy-800 border border-[#2e5088] rounded-lg text-white placeholder-slate focus:border-gold transition-colors"
+                                placeholder="Your full name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-light mb-2">Email *</label>
+                            <input type="email" name="email" required
+                                class="w-full px-4 py-3 bg-navy-800 border border-[#2e5088] rounded-lg text-white placeholder-slate focus:border-gold transition-colors"
+                                placeholder="you@company.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-light mb-2">Company</label>
+                            <input type="text" name="company"
+                                class="w-full px-4 py-3 bg-navy-800 border border-[#2e5088] rounded-lg text-white placeholder-slate focus:border-gold transition-colors"
+                                placeholder="Your company name (optional)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-light mb-2">What are you looking for? *</label>
+                            <textarea name="message" required rows="4"
+                                class="w-full px-4 py-3 bg-navy-800 border border-[#2e5088] rounded-lg text-white placeholder-slate focus:border-gold transition-colors resize-none"
+                                placeholder="Describe your medal project—style, quantity, finish, timeline. Attach artwork later if needed."></textarea>
+                        </div>
+                        <p class="text-xs text-slate">You can attach artwork after submitting—we'll follow up by email.</p>
+                        <button type="submit"
+                            class="w-full px-8 py-4 bg-gold text-white font-semibold rounded-lg hover:bg-gold-light transition-all text-lg">
+                            Send Inquiry →
+                        </button>
+                    </form>
+                </div>
+                <!-- Contact -->
+                <div class="md:col-span-2 space-y-8">
+                    <div>
+                        <h4 class="text-sm font-semibold text-gold uppercase tracking-widest mb-4">Contact</h4>
+                        <div class="space-y-4 text-slate">
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                <span>hayes.xia@gmail.com</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span>Yiwu, Zhejiang, China</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-gold flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                <a href="https://linkedin.com/in/hayesxia" target="_blank" rel="noopener" class="hover:text-gold transition-colors">LinkedIn →</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-gold uppercase tracking-widest mb-4">Response Time</h4>
+                        <p class="text-slate text-sm leading-relaxed">Most inquiries receive a detailed response within <span class="text-slate-light font-medium">24 hours</span> (business days, China Standard Time).</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="mt-20 pt-8 border-t border-[#2e5088] flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate">
+                <p>&copy; 2026 AwardLink · Custom Medal Production Partner</p>
+                <div class="flex gap-6">
+                    <a href="#hero" class="hover:text-gold transition-colors">Home</a>
+                    <a href="#capabilities" class="hover:text-gold transition-colors">Capabilities</a>
+                    <a href="#process" class="hover:text-gold transition-colors">Process</a>
+                    <a href="#quote" class="hover:text-gold transition-colors">Quote</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // --- NAVBAR scroll effect ---
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 60) {
+                navbar.classList.add('bg-navy', 'bg-opacity-95', 'backdrop-blur-xl', 'border-b', 'border-[#2e5088]');
+                navbar.classList.remove('py-6');
+                navbar.classList.add('py-3');
+            } else {
+                navbar.classList.remove('bg-navy', 'bg-opacity-95', 'backdrop-blur-xl', 'border-b', 'border-[#2e5088]');
+                navbar.classList.remove('py-3');
+                navbar.classList.add('py-6');
+            }
+        });
+
+        // --- MOBILE MENU ---
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileMenuBtn.addEventListener('click', () => { mobileMenu.classList.remove('hidden'); });
+        mobileCloseBtn.addEventListener('click', () => { mobileMenu.classList.add('hidden'); });
+        mobileLinks.forEach(link => { link.addEventListener('click', () => { mobileMenu.classList.add('hidden'); }); });
+
+        // --- SCROLL ANIMATION ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // --- SUPABASE FORM ---
+        const SUPABASE_URL = 'SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'SUPABASE_ANON_KEY';
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; }, 3000);
+            setTimeout(() => toast.remove(), 3400);
+        }
+
+        document.getElementById('quoteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+
+            const formData = {
+                name: this.name.value.trim(),
+                email: this.email.value.trim(),
+                company: this.company.value.trim() || null,
+                message: this.message.value.trim(),
+                source: 'awardlink.co'
+            };
+
+            try {
+                if (SUPABASE_URL === 'SUPABASE_URL') {
+                    // Supabase not configured yet — show friendly message
+                    showToast('Thanks for your inquiry! We received it and will respond within 24 hours. (Form storage pending setup)', 'success');
+                } else {
+                    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    const { error } = await supabase.from('quotes').insert([formData]);
+                    if (error) throw error;
+                    showToast('Thanks for your inquiry! We\\'ll get back to you within 24 hours.', 'success');
+                }
+                this.reset();
+            } catch (err) {
+                console.error('Form submission error:', err);
+                showToast('Something went wrong. Please email us directly at hayes.xia@gmail.com', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
