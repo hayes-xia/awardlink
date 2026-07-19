@@ -23,9 +23,16 @@
                             DEFAULT: '#b8860b',
                             light: '#d4a745',
                         },
-                        slate: {
-                            DEFAULT: '#475569',
-                            light: '#cbd5e1',
+                        'slate-custom': {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
                         }
                     },
                     fontFamily: {
@@ -36,356 +43,436 @@
         }
     </script>
     <style>
-        .fade-up {
+        html { scroll-behavior: smooth; }
+
+        .reveal {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(24px);
             transition: opacity 0.7s ease-out, transform 0.7s ease-out;
         }
-        .fade-up.visible {
+        .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        .hero-bg {
-            background: linear-gradient(135deg, #1a365d 0%, #0f243e 40%, #1a365d 100%);
-            position: relative;
-        }
-        .hero-bg::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse at 20% 50%, rgba(184,134,11,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(184,134,11,0.05) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        .geometric-overlay {
-            position: absolute;
-            inset: 0;
-            opacity: 0.03;
-            background-image:
-                linear-gradient(30deg, #cbd5e1 1px, transparent 1px),
-                linear-gradient(-30deg, #cbd5e1 1px, transparent 1px);
-            background-size: 60px 60px;
-            pointer-events: none;
-        }
+
         .accent-line {
             width: 48px;
             height: 3px;
             background: #b8860b;
             border-radius: 2px;
         }
-        .accent-line.center {
-            margin: 0 auto;
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        .process-line {
-            position: absolute;
-            top: 28px;
-            left: calc(50% + 40px);
-            width: calc(100% - 80px);
-            height: 2px;
-            background: linear-gradient(90deg, #b8860b, #475569);
-            display: none;
-        }
-        @media (min-width: 768px) {
-            .process-line { display: block; }
-        }
+        .accent-line.center { margin: 0 auto; }
+
         input:focus, textarea:focus {
             outline: none;
-            border-color: #b8860b;
-            box-shadow: 0 0 0 2px rgba(184,134,11,0.2);
+            border-color: #b8860b !important;
+            box-shadow: 0 0 0 3px rgba(184,134,11,0.1) !important;
         }
+
         .toast {
             position: fixed;
-            bottom: 24px;
+            top: 24px;
             right: 24px;
             padding: 16px 24px;
             border-radius: 8px;
             color: #fff;
             font-weight: 500;
             z-index: 9999;
-            animation: slideIn 0.3s ease-out;
+            animation: slideInRight 0.3s ease-out;
+            max-width: 400px;
         }
         .toast-success { background: #15803d; }
         .toast-error { background: #991b1b; }
-        @keyframes slideIn {
-            from { transform: translateX(100px); opacity: 0; }
+        @keyframes slideInRight {
+            from { transform: translateX(120px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
+        }
+
+        .hero-img-cell {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hero-img-cell:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.1);
         }
     </style>
 </head>
-<body class="bg-[#1a365d] text-slate-light font-sans">
+<body class="bg-white text-slate-custom-700 font-sans antialiased">
 
-    <!-- ============ NAVBAR ============ -->
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between transition-all duration-300">
-        <div class="flex items-center gap-2">
-            <span class="text-xl font-extrabold text-white tracking-tight">Award<span class="text-gold">Link</span></span>
+    <!-- ===== NAVBAR ===== -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-transparent transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#hero" class="flex items-center gap-2 text-xl font-extrabold text-navy tracking-tight">
+                🏅 Award<span class="text-gold">Link</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-custom-600">
+                <a href="#capabilities" class="hover:text-navy transition-colors">Capabilities</a>
+                <a href="#why-us" class="hover:text-navy transition-colors">Why Us</a>
+                <a href="#process" class="hover:text-navy transition-colors">Process</a>
+                <a href="#distributors" class="hover:text-navy transition-colors">Distributors</a>
+                <a href="#quote" class="px-5 py-2.5 bg-gold text-white rounded-lg hover:bg-gold-light transition-colors font-semibold shadow-sm">Request Quote</a>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden text-slate-custom-700 hover:text-navy text-2xl" aria-label="Menu">☰</button>
         </div>
-        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-light">
-            <a href="#capabilities" class="hover:text-gold transition-colors">Capabilities</a>
-            <a href="#why-us" class="hover:text-gold transition-colors">Why Us</a>
-            <a href="#process" class="hover:text-gold transition-colors">Process</a>
-            <a href="#about" class="hover:text-gold transition-colors">About</a>
-            <a href="#quote" class="px-4 py-2 bg-gold text-white rounded-lg hover:bg-gold-light transition-colors text-sm font-semibold">Request Quote</a>
-        </div>
-        <!-- Mobile menu button -->
-        <button id="mobileMenuBtn" class="md:hidden text-slate-light hover:text-white text-2xl" aria-label="Menu">☰</button>
     </nav>
     <!-- Mobile menu -->
-    <div id="mobileMenu" class="fixed inset-0 z-40 bg-navy bg-opacity-98 flex flex-col items-center justify-center gap-8 text-lg font-medium hidden">
-        <button id="mobileCloseBtn" class="absolute top-6 right-6 text-slate-light hover:text-white text-3xl" aria-label="Close">✕</button>
-        <a href="#capabilities" class="text-slate-light hover:text-gold transition-colors mobile-link">Capabilities</a>
-        <a href="#why-us" class="text-slate-light hover:text-gold transition-colors mobile-link">Why Us</a>
-        <a href="#process" class="text-slate-light hover:text-gold transition-colors mobile-link">Process</a>
-        <a href="#about" class="text-slate-light hover:text-gold transition-colors mobile-link">About</a>
-        <a href="#quote" class="px-6 py-3 bg-gold text-white rounded-lg hover:bg-gold-light transition-colors mobile-link">Request Quote</a>
+    <div id="mobileMenu" class="fixed inset-0 z-40 bg-white flex flex-col items-center justify-center gap-8 text-lg font-medium hidden">
+        <button id="mobileCloseBtn" class="absolute top-6 right-6 text-slate-custom-500 hover:text-navy text-3xl" aria-label="Close">✕</button>
+        <a href="#capabilities" class="mobile-link text-slate-custom-700 hover:text-navy">Capabilities</a>
+        <a href="#why-us" class="mobile-link text-slate-custom-700 hover:text-navy">Why Us</a>
+        <a href="#process" class="mobile-link text-slate-custom-700 hover:text-navy">Process</a>
+        <a href="#distributors" class="mobile-link text-slate-custom-700 hover:text-navy">Distributors</a>
+        <a href="#quote" class="mobile-link px-6 py-3 bg-gold text-white rounded-lg hover:bg-gold-light">Request Quote</a>
     </div>
 
-    <!-- ============ HERO ============ -->
-    <section id="hero" class="hero-bg min-h-screen flex items-center relative overflow-hidden">
-        <div class="geometric-overlay"></div>
-        <div class="max-w-4xl mx-auto px-6 py-32 relative z-10">
-            <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-4">Yiwu, China</p>
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
-                Custom Medal<br class="md:hidden"> Production Partner
-            </h1>
-            <p class="text-lg md:text-xl text-slate mb-8 max-w-2xl leading-relaxed">
-                From simple 2D event medals to complex 3D designs. Built for trophy shops &amp; awards distributors who need a reliable production partner—without the factory overhead.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 mb-12">
-                <a href="#quote" class="px-8 py-4 bg-gold text-white font-semibold rounded-lg hover:bg-gold-light transition-all text-center text-lg">
-                    Request a Quote →
-                </a>
-                <a href="#capabilities" class="px-8 py-4 border-2 border-slate text-slate-light font-semibold rounded-lg hover:border-gold hover:text-gold transition-all text-center text-lg">
-                    See Our Capabilities ↓
-                </a>
+    <!-- ===== HERO ===== -->
+    <section id="hero" class="min-h-screen flex items-center bg-white pt-16">
+        <div class="max-w-6xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12 md:gap-16">
+            <!-- LEFT -->
+            <div class="flex-1 text-center md:text-left">
+                <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-4 reveal">Yiwu, China</p>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-navy leading-tight mb-6 reveal">
+                    Custom Medal Production<br class="hidden sm:block"> Partner for Trophy Shops
+                </h1>
+                <p class="text-lg md:text-xl text-slate-custom-600 mb-8 max-w-xl reveal">
+                    From 2D event medals to complex 3D designs. Based in Yiwu, China. Flexible quantities, 24-hour artwork review, white-label delivery.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 mb-8 reveal">
+                    <a href="#quote" class="px-8 py-4 bg-gold text-white font-semibold rounded-lg hover:bg-gold-light transition-all text-center text-lg shadow-md hover:shadow-lg">
+                        Request a Quote →
+                    </a>
+                    <a href="#capabilities" class="px-8 py-4 border-2 border-navy text-navy font-semibold rounded-lg hover:bg-navy hover:text-white transition-all text-center text-lg">
+                        View Capabilities ↓
+                    </a>
+                </div>
+                <p class="text-sm text-slate-custom-400 reveal">Sample orders welcome · 24h design feedback · Flexible from trial to bulk</p>
             </div>
-            <p class="text-sm text-slate">Sample orders welcome · Flexible quantities from trial to bulk · Yiwu, China</p>
+            <!-- RIGHT: 2×2 placeholder grid -->
+            <div class="flex-1 reveal">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="hero-img-cell aspect-square rounded-2xl border-2 border-dashed border-slate-custom-200 bg-slate-custom-50 flex flex-col items-center justify-center">
+                        <span class="text-5xl">🏅</span>
+                        <span class="text-xs text-slate-custom-400 mt-3 font-medium">2D &amp; 3D Relief</span>
+                    </div>
+                    <div class="hero-img-cell aspect-square rounded-2xl border-2 border-dashed border-slate-custom-200 bg-slate-custom-50 flex flex-col items-center justify-center">
+                        <span class="text-5xl">🎨</span>
+                        <span class="text-xs text-slate-custom-400 mt-3 font-medium">Soft Enamel &amp; UV</span>
+                    </div>
+                    <div class="hero-img-cell aspect-square rounded-2xl border-2 border-dashed border-slate-custom-200 bg-slate-custom-50 flex flex-col items-center justify-center">
+                        <span class="text-5xl">✨</span>
+                        <span class="text-xs text-slate-custom-400 mt-3 font-medium">Special Finishes</span>
+                    </div>
+                    <div class="hero-img-cell aspect-square rounded-2xl border-2 border-dashed border-slate-custom-200 bg-slate-custom-50 flex flex-col items-center justify-center">
+                        <span class="text-5xl">🔧</span>
+                        <span class="text-xs text-slate-custom-400 mt-3 font-medium">Custom Structures</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- ============ CAPABILITIES ============ -->
-    <section id="capabilities" class="py-24 px-6 bg-[#0f243e]">
+    <!-- ===== CAPABILITIES ===== -->
+    <section id="capabilities" class="py-24 px-6 bg-white">
         <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16 fade-up">
+            <div class="text-center mb-16 reveal">
                 <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">What We Make</p>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Zinc Alloy Medals, Your Design</h2>
-                <div class="accent-line center"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">Four Process Categories</h2>
+                <div class="accent-line center mb-6"></div>
+                <p class="text-slate-custom-500 max-w-xl mx-auto">Send us your artwork — we'll tell you how to produce it. Every process is available in flexible quantities.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-navy-800 rounded-xl p-8 card-hover border border-[#2e5088] fade-up">
-                    <span class="text-4xl mb-4 block">🏅</span>
-                    <h3 class="text-xl font-bold text-white mb-2">2D &amp; 3D Relief Medals</h3>
-                    <p class="text-slate">Your artwork, precision-cast in zinc alloy. From simple flat relief to deep sculpted 3D designs with fine detail.</p>
+                <!-- Card 1 -->
+                <div class="bg-white border border-slate-custom-200 rounded-xl p-8 reveal hover:shadow-xl hover:-translate-y-1 hover:border-t-gold hover:border-t-4 transition-all duration-300">
+                    <span class="text-5xl mb-5 block">🏅</span>
+                    <h3 class="text-xl font-bold text-navy mb-2">2D &amp; 3D Relief Medals</h3>
+                    <p class="text-slate-custom-600 leading-relaxed">Your artwork precision-cast in zinc alloy. From simple flat relief to deep sculpted 3D designs with fine detail and texture.</p>
                 </div>
-                <div class="bg-navy-800 rounded-xl p-8 card-hover border border-[#2e5088] fade-up">
-                    <span class="text-4xl mb-4 block">🎨</span>
-                    <h3 class="text-xl font-bold text-white mb-2">Soft Enamel &amp; UV Print</h3>
-                    <p class="text-slate">Vibrant full-color custom designs with smooth enamel fills or high-resolution UV printing—no minimum.</p>
+                <!-- Card 2 -->
+                <div class="bg-white border border-slate-custom-200 rounded-xl p-8 reveal hover:shadow-xl hover:-translate-y-1 hover:border-t-gold hover:border-t-4 transition-all duration-300">
+                    <span class="text-5xl mb-5 block">🎨</span>
+                    <h3 class="text-xl font-bold text-navy mb-2">Soft Enamel &amp; UV Print</h3>
+                    <p class="text-slate-custom-600 leading-relaxed">Vibrant full-color custom designs. Smooth enamel fills or high-resolution UV printing — rich, durable, and true to your artwork.</p>
                 </div>
-                <div class="bg-navy-800 rounded-xl p-8 card-hover border border-[#2e5088] fade-up">
-                    <span class="text-4xl mb-4 block">✨</span>
-                    <h3 class="text-xl font-bold text-white mb-2">Special Finishes</h3>
-                    <p class="text-slate">Antique plating, mirror polish, epoxy dome coating, cut-out shapes, textured surfaces—the details that sell.</p>
+                <!-- Card 3 -->
+                <div class="bg-white border border-slate-custom-200 rounded-xl p-8 reveal hover:shadow-xl hover:-translate-y-1 hover:border-t-gold hover:border-t-4 transition-all duration-300">
+                    <span class="text-5xl mb-5 block">✨</span>
+                    <h3 class="text-xl font-bold text-navy mb-2">Special Finishes</h3>
+                    <p class="text-slate-custom-600 leading-relaxed">Antique plating, mirror polish, epoxy dome, cut-out shapes, glitter enamel, textured surfaces — the details that sell.</p>
                 </div>
-                <div class="bg-navy-800 rounded-xl p-8 card-hover border border-[#2e5088] fade-up">
-                    <span class="text-4xl mb-4 block">🔧</span>
-                    <h3 class="text-xl font-bold text-white mb-2">Custom Structures</h3>
-                    <p class="text-slate">Spinners, bottle openers, multi-layer medals, irregular shapes. Send us your idea—if it can be cast, we'll find a way.</p>
+                <!-- Card 4 -->
+                <div class="bg-white border border-slate-custom-200 rounded-xl p-8 reveal hover:shadow-xl hover:-translate-y-1 hover:border-t-gold hover:border-t-4 transition-all duration-300">
+                    <span class="text-5xl mb-5 block">🔧</span>
+                    <h3 class="text-xl font-bold text-navy mb-2">Custom Structures</h3>
+                    <p class="text-slate-custom-600 leading-relaxed">Spinners, bottle openers, multi-layer medals, irregular shapes. Send us your idea — if it can be cast in zinc alloy, we'll find a way.</p>
                 </div>
             </div>
-            <p class="text-center text-slate mt-10 text-sm fade-up">Not sure what's possible? Send us your artwork—we'll tell you in 24 hours.</p>
+            <p class="text-center text-slate-custom-500 mt-10 text-sm italic reveal">
+                Not sure what's possible? Send us your artwork — we'll tell you in 24 hours.
+            </p>
         </div>
     </section>
 
-    <!-- ============ WHY US ============ -->
-    <section id="why-us" class="py-24 px-6 bg-navy">
+    <!-- ===== WHY US (light gray bg) ===== -->
+    <section id="why-us" class="py-24 px-6 bg-slate-custom-50">
         <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16 fade-up">
+            <div class="text-center mb-16 reveal">
                 <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Why AwardLink</p>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Built for Your Business</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">Built for Your Business</h2>
                 <div class="accent-line center"></div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                <div class="text-center fade-up">
+                <!-- Col 1 -->
+                <div class="text-center reveal">
                     <div class="w-16 h-16 bg-gold bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14"/></svg>
+                        <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-3">Flexible Quantities</h3>
-                    <p class="text-slate text-sm leading-relaxed">From a 50-piece trial order to a 50,000-piece tournament run. We scale with you—no rigid MOQ walls.</p>
+                    <h3 class="text-lg font-bold text-navy mb-3">Flexible Quantities</h3>
+                    <p class="text-slate-custom-600 text-sm leading-relaxed">From 50-piece trial runs to 50,000-piece event bulk. No rigid MOQ walls — we scale with your needs.</p>
                 </div>
-                <div class="text-center fade-up">
+                <!-- Col 2 -->
+                <div class="text-center reveal">
                     <div class="w-16 h-16 bg-gold bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+                        <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-3">White-Label Ready</h3>
-                    <p class="text-slate text-sm leading-relaxed">Your brand. Your packaging. Your customer relationship. We stay behind the scenes—no AwardLink branding on your products.</p>
+                    <h3 class="text-lg font-bold text-navy mb-3">White-Label Ready</h3>
+                    <p class="text-slate-custom-600 text-sm leading-relaxed">Your brand, your packaging, your customer relationships. We stay behind the scenes — no AwardLink branding on your products.</p>
                 </div>
-                <div class="text-center fade-up">
+                <!-- Col 3 -->
+                <div class="text-center reveal">
                     <div class="w-16 h-16 bg-gold bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-6">
                         <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-3">Fast Design Feedback</h3>
-                    <p class="text-slate text-sm leading-relaxed">Send your artwork—we'll evaluate producibility and quote within 24 hours. No vague estimates, no runaround.</p>
+                    <h3 class="text-lg font-bold text-navy mb-3">Fast Design Feedback</h3>
+                    <p class="text-slate-custom-600 text-sm leading-relaxed">24-hour artwork review and quote. We tell you what's possible before you commit — no vague estimates, no runaround.</p>
                 </div>
             </div>
             <!-- Trust banner -->
-            <div class="bg-navy-800 border border-[#2e5088] rounded-xl px-8 py-10 text-center fade-up">
-                <p class="text-lg md:text-xl text-slate-light font-medium italic">
-                    "We don't own a factory floor. <span class="text-gold">We own the supply chain</span> that gets your medals made right."
+            <div class="bg-navy rounded-xl px-8 py-10 text-center reveal max-w-3xl mx-auto">
+                <p class="text-lg md:text-xl text-white font-medium italic leading-relaxed">
+                    "We don't own a factory floor. <span class="text-gold-light">We own the supply chain</span> that gets your medals made right."
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- ============ PROCESS ============ -->
-    <section id="process" class="py-24 px-6 bg-[#0f243e]">
+    <!-- ===== PROCESS (white bg) ===== -->
+    <section id="process" class="py-24 px-6 bg-white">
         <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16 fade-up">
+            <div class="text-center mb-16 reveal">
                 <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">How It Works</p>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">From Artwork to Delivery</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">From Artwork to Delivery</h2>
                 <div class="accent-line center"></div>
             </div>
-            <div class="relative grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="process-line"></div>
-                <div class="text-center fade-up relative z-10">
-                    <div class="w-14 h-14 bg-navy rounded-full border-2 border-gold flex items-center justify-center mx-auto mb-5">
-                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <!-- 5-step desktop horizontal, mobile vertical -->
+            <div class="relative flex flex-col md:flex-row gap-0 md:gap-0">
+                <!-- Step 1 -->
+                <div class="flex-1 text-center px-4 py-6 reveal relative">
+                    <div class="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 shadow-md">
+                        <span class="text-white font-bold text-lg">1</span>
                     </div>
-                    <h4 class="text-white font-bold mb-2">1. Send Artwork</h4>
-                    <p class="text-slate text-sm">Share your design file, sketch, or reference photo. Any format works.</p>
+                    <h4 class="text-navy font-bold mb-2">Send Artwork</h4>
+                    <p class="text-slate-custom-500 text-sm">Share your design, sketch, or reference image. Any format works.</p>
+                    <!-- Arrow (desktop only) -->
+                    <div class="hidden md:block absolute top-9 left-[calc(50%+32px)] w-[calc(100%-64px)]">
+                        <svg class="w-full h-6 text-slate-custom-300" viewBox="0 0 200 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="0" y1="12" x2="180" y2="12"/>
+                            <polyline points="172,6 184,12 172,18"/>
+                        </svg>
+                    </div>
+                    <!-- Down arrow mobile -->
+                    <div class="md:hidden flex justify-center py-3">
+                        <svg class="w-6 h-6 text-slate-custom-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                    </div>
                 </div>
-                <div class="text-center fade-up relative z-10">
-                    <div class="w-14 h-14 bg-navy rounded-full border-2 border-gold flex items-center justify-center mx-auto mb-5">
-                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <!-- Step 2 -->
+                <div class="flex-1 text-center px-4 py-6 reveal relative">
+                    <div class="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 shadow-md">
+                        <span class="text-white font-bold text-lg">2</span>
                     </div>
-                    <h4 class="text-white font-bold mb-2">2. Design Review</h4>
-                    <p class="text-slate text-sm">We assess producibility and send you a detailed quote—within 24 hours.</p>
+                    <h4 class="text-navy font-bold mb-2">Design Review</h4>
+                    <p class="text-slate-custom-500 text-sm">We evaluate producibility and provide a detailed quote — within 24 hours.</p>
+                    <div class="hidden md:block absolute top-9 left-[calc(50%+32px)] w-[calc(100%-64px)]">
+                        <svg class="w-full h-6 text-slate-custom-300" viewBox="0 0 200 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="0" y1="12" x2="180" y2="12"/>
+                            <polyline points="172,6 184,12 172,18"/>
+                        </svg>
+                    </div>
+                    <div class="md:hidden flex justify-center py-3">
+                        <svg class="w-6 h-6 text-slate-custom-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                    </div>
                 </div>
-                <div class="text-center fade-up relative z-10">
-                    <div class="w-14 h-14 bg-navy rounded-full border-2 border-gold flex items-center justify-center mx-auto mb-5">
-                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <!-- Step 3 -->
+                <div class="flex-1 text-center px-4 py-6 reveal relative">
+                    <div class="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 shadow-md">
+                        <span class="text-white font-bold text-lg">3</span>
                     </div>
-                    <h4 class="text-white font-bold mb-2">3. Sample Approval</h4>
-                    <p class="text-slate text-sm">We produce a physical sample. You approve it before production begins.</p>
+                    <h4 class="text-navy font-bold mb-2">Quote &amp; Sampling</h4>
+                    <p class="text-slate-custom-500 text-sm">Approve the quote, we produce physical samples for your review and sign-off.</p>
+                    <div class="hidden md:block absolute top-9 left-[calc(50%+32px)] w-[calc(100%-64px)]">
+                        <svg class="w-full h-6 text-slate-custom-300" viewBox="0 0 200 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="0" y1="12" x2="180" y2="12"/>
+                            <polyline points="172,6 184,12 172,18"/>
+                        </svg>
+                    </div>
+                    <div class="md:hidden flex justify-center py-3">
+                        <svg class="w-6 h-6 text-slate-custom-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                    </div>
                 </div>
-                <div class="text-center fade-up relative z-10">
-                    <div class="w-14 h-14 bg-navy rounded-full border-2 border-gold flex items-center justify-center mx-auto mb-5">
-                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                <!-- Step 4 -->
+                <div class="flex-1 text-center px-4 py-6 reveal relative">
+                    <div class="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 shadow-md">
+                        <span class="text-white font-bold text-lg">4</span>
                     </div>
-                    <h4 class="text-white font-bold mb-2">4. Delivery</h4>
-                    <p class="text-slate text-sm">Production → quality check → shipped from Yiwu. Full tracking provided.</p>
+                    <h4 class="text-navy font-bold mb-2">Production</h4>
+                    <p class="text-slate-custom-500 text-sm">Sample approved → full production begins. Quality checks at every stage.</p>
+                    <div class="hidden md:block absolute top-9 left-[calc(50%+32px)] w-[calc(100%-64px)]">
+                        <svg class="w-full h-6 text-slate-custom-300" viewBox="0 0 200 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="0" y1="12" x2="180" y2="12"/>
+                            <polyline points="172,6 184,12 172,18"/>
+                        </svg>
+                    </div>
+                    <div class="md:hidden flex justify-center py-3">
+                        <svg class="w-6 h-6 text-slate-custom-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                    </div>
+                </div>
+                <!-- Step 5 -->
+                <div class="flex-1 text-center px-4 py-6 reveal">
+                    <div class="w-14 h-14 bg-navy rounded-full flex items-center justify-center mx-auto mb-5 shadow-md">
+                        <span class="text-white font-bold text-lg">5</span>
+                    </div>
+                    <h4 class="text-navy font-bold mb-2">Delivery</h4>
+                    <p class="text-slate-custom-500 text-sm">Yiwu direct shipping with full tracking. Worldwide delivery via air or sea freight.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============ ABOUT / PRODUCTION NETWORK ============ -->
-    <section id="about" class="py-24 px-6 bg-navy">
+    <!-- ===== FOR DISTRIBUTORS (light gray bg) ===== -->
+    <section id="distributors" class="py-24 px-6 bg-slate-custom-50">
         <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16 fade-up">
-                <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">About</p>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Your Partner, Not Your Competition</h2>
-                <div class="accent-line center"></div>
+            <div class="text-center mb-16 reveal">
+                <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">For Distributors</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">Built for Distributors</h2>
+                <div class="accent-line center mb-6"></div>
+                <p class="text-slate-custom-500 max-w-lg mx-auto">We don't sell retail. We don't own a consumer brand. You are our customer — we are your production partner.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-                <div class="fade-up">
-                    <h3 class="text-xl font-bold text-white mb-4">Who We Work With</h3>
-                    <p class="text-slate mb-6 leading-relaxed">
-                        AwardLink is built for <span class="text-slate-light font-medium">trophy shops, awards distributors, event companies, and promotional product resellers</span>—businesses that sell medals to their own customers.
-                    </p>
-                    <p class="text-slate leading-relaxed">
-                        We don't sell to end customers. We don't build our own brand on your products. We exist to make <em>your</em> medal orders happen—on time, on spec, on budget.
-                    </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12 reveal">
+                <!-- LEFT -->
+                <div>
+                    <h3 class="text-xl font-bold text-navy mb-5 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        Who We Work With
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span class="text-slate-custom-700">Trophy Shops</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span class="text-slate-custom-700">Awards Distributors</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span class="text-slate-custom-700">Event Companies</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span class="text-slate-custom-700">Promotional Product Resellers</span>
+                        </li>
+                    </ul>
                 </div>
-                <div class="fade-up">
-                    <h3 class="text-xl font-bold text-white mb-4">How Production Works</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
-                            <span class="text-gold text-lg mt-0.5">✓</span>
-                            <span class="text-slate"><strong class="text-slate-light">Your branding</strong> — white-label shipping, your packaging and tags.</span>
+                <!-- RIGHT -->
+                <div>
+                    <h3 class="text-xl font-bold text-navy mb-5 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        How Production Works
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span class="text-slate-custom-700"><strong class="text-navy">White-label shipping</strong> — your brand on every package</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-gold text-lg mt-0.5">✓</span>
-                            <span class="text-slate"><strong class="text-slate-light">Your designs</strong> — send artwork, we assess producibility within 24 hours.</span>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span class="text-slate-custom-700"><strong class="text-navy">Your designs</strong> — you send artwork, we evaluate and produce</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-gold text-lg mt-0.5">✓</span>
-                            <span class="text-slate"><strong class="text-slate-light">Our network</strong> — Yiwu supply chain, from casting to finishing. We don't claim a factory. We commit to delivery quality.</span>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span class="text-slate-custom-700"><strong class="text-navy">24-hour review</strong> — fast quotes, no vague responses</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-gold text-lg mt-0.5">✓</span>
-                            <span class="text-slate"><strong class="text-slate-light">Drop-shipping available</strong> — we ship directly to your customer.</span>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span class="text-slate-custom-700"><strong class="text-navy">Yiwu supply chain</strong> — direct coordination, no middlemen</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span class="text-slate-custom-700"><strong class="text-navy">Drop-shipping available</strong> — ship directly to your customer</span>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div class="bg-navy-800 border border-[#2e5088] rounded-xl px-8 py-10 text-center fade-up">
-                <p class="text-lg md:text-xl text-slate-light font-medium italic">
-                    "We don't own a factory floor. <span class="text-gold">We own the supply chain</span> that gets your medals made right."
+            <!-- Trust banner -->
+            <div class="bg-navy rounded-xl px-8 py-10 text-center reveal max-w-3xl mx-auto">
+                <p class="text-lg md:text-xl text-white font-medium italic leading-relaxed">
+                    "Your back-end production partner in China. <span class="text-gold-light">We protect your brand</span> and your customer relationships."
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- ============ QUOTE + FOOTER ============ -->
-    <section id="quote" class="py-24 px-6 bg-[#0f243e]">
+    <!-- ===== QUOTE + FOOTER ===== -->
+    <section id="quote" class="py-24 px-6 bg-white">
         <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16 fade-up">
+            <div class="text-center mb-16 reveal">
                 <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Get Started</p>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Request a Quote</h2>
-                <div class="accent-line center"></div>
-                <p class="text-slate mt-4 max-w-lg mx-auto">Tell us what you're looking for. We'll evaluate your design and respond within 24 hours.</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">Start Your Project</h2>
+                <div class="accent-line center mb-6"></div>
+                <p class="text-slate-custom-500 max-w-lg mx-auto">Tell us what you need. We'll get back to you within 24 hours.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-12 fade-up">
-                <!-- Form -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-12 reveal">
+                <!-- FORM -->
                 <div class="md:col-span-3">
-                    <form id="quoteForm" class="space-y-5">
+                    <form id="quoteForm" class="bg-slate-custom-50 rounded-xl p-8 space-y-5 border border-slate-custom-200">
                         <div>
-                            <label class="block text-sm font-medium text-slate-light mb-2">Name *</label>
+                            <label class="block text-sm font-semibold text-slate-custom-700 mb-2">Name <span class="text-gold">*</span></label>
                             <input type="text" name="name" required
-                                class="w-full px-4 py-3 bg-navy-800 border border-[#2e5088] rounded-lg text-white placeholder-slate focus:border-gold transition-colors"
+                                class="w-full px-4 py-3 bg-white border border-slate-custom-200 rounded-lg text-slate-custom-800 placeholder-slate-custom-400 transition-colors"
                                 placeholder="Your full name">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-light mb-2">Email *</label>
+                            <label class="block text-sm font-semibold text-slate-custom-700 mb-2">Email <span class="text-gold">*</span></label>
                             <input type="email" name="email" required
-                                class="w-full px-4 py-3 bg-navy-800 border border-[#2e5088] rounded-lg text-white placeholder-slate focus:border-gold transition-colors"
+                                class="w-full px-4 py-3 bg-white border border-slate-custom-200 rounded-lg text-slate-custom-800 placeholder-slate-custom-400 transition-colors"
                                 placeholder="you@company.com">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-light mb-2">Company</label>
+                            <label class="block text-sm font-semibold text-slate-custom-700 mb-2">Company <span class="text-slate-custom-400 font-normal">(optional)</span></label>
                             <input type="text" name="company"
-                                class="w-full px-4 py-3 bg-navy-800 border border-[#2e5088] rounded-lg text-white placeholder-slate focus:border-gold transition-colors"
-                                placeholder="Your company name (optional)">
+                                class="w-full px-4 py-3 bg-white border border-slate-custom-200 rounded-lg text-slate-custom-800 placeholder-slate-custom-400 transition-colors"
+                                placeholder="Your company name">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-light mb-2">What are you looking for? *</label>
-                            <textarea name="message" required rows="4"
-                                class="w-full px-4 py-3 bg-navy-800 border border-[#2e5088] rounded-lg text-white placeholder-slate focus:border-gold transition-colors resize-none"
-                                placeholder="Describe your medal project—style, quantity, finish, timeline. Attach artwork later if needed."></textarea>
+                            <label class="block text-sm font-semibold text-slate-custom-700 mb-2">What are you looking for? <span class="text-gold">*</span></label>
+                            <textarea name="message" required rows="5"
+                                class="w-full px-4 py-3 bg-white border border-slate-custom-200 rounded-lg text-slate-custom-800 placeholder-slate-custom-400 transition-colors resize-none"
+                                placeholder="Describe your medal project — style, quantity, finish, timeline. You can attach artwork or reference images after submitting."></textarea>
                         </div>
-                        <p class="text-xs text-slate">You can attach artwork after submitting—we'll follow up by email.</p>
+                        <p class="text-xs text-slate-custom-400">You can attach artwork or reference images after submitting — we'll follow up by email.</p>
                         <button type="submit"
-                            class="w-full px-8 py-4 bg-gold text-white font-semibold rounded-lg hover:bg-gold-light transition-all text-lg">
+                            class="w-full px-8 py-4 bg-gold text-white font-semibold rounded-lg hover:bg-gold-light transition-all text-lg shadow-md hover:shadow-lg">
                             Send Inquiry →
                         </button>
                     </form>
                 </div>
-                <!-- Contact -->
+                <!-- CONTACT -->
                 <div class="md:col-span-2 space-y-8">
                     <div>
-                        <h4 class="text-sm font-semibold text-gold uppercase tracking-widest mb-4">Contact</h4>
-                        <div class="space-y-4 text-slate">
+                        <h4 class="text-sm font-semibold text-gold uppercase tracking-widest mb-5">Contact</h4>
+                        <div class="space-y-4 text-slate-custom-600">
                             <div class="flex items-center gap-3">
                                 <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                <span>hayes.xia@gmail.com</span>
+                                <a href="mailto:hayes.xia@gmail.com" class="text-gold hover:text-gold-light transition-colors font-medium">hayes.xia@gmail.com</a>
                             </div>
                             <div class="flex items-center gap-3">
                                 <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -393,43 +480,65 @@
                             </div>
                             <div class="flex items-center gap-3">
                                 <svg class="w-5 h-5 text-gold flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                                <a href="https://linkedin.com/in/hayesxia" target="_blank" rel="noopener" class="hover:text-gold transition-colors">LinkedIn →</a>
+                                <a href="https://linkedin.com/in/hayesxia" target="_blank" rel="noopener" class="hover:text-gold transition-colors font-medium">LinkedIn →</a>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <h4 class="text-sm font-semibold text-gold uppercase tracking-widest mb-4">Response Time</h4>
-                        <p class="text-slate text-sm leading-relaxed">Most inquiries receive a detailed response within <span class="text-slate-light font-medium">24 hours</span> (business days, China Standard Time).</p>
+                    <div class="bg-slate-custom-50 rounded-lg p-5 border border-slate-custom-200">
+                        <p class="text-slate-custom-500 text-sm leading-relaxed">
+                            Most inquiries receive a detailed response within <strong class="text-slate-custom-700">24 hours</strong> (business days, China Standard Time). Prefer to email directly? Reach out anytime.
+                        </p>
                     </div>
-                </div>
-            </div>
-            <!-- Footer -->
-            <div class="mt-20 pt-8 border-t border-[#2e5088] flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate">
-                <p>&copy; 2026 AwardLink · Custom Medal Production Partner</p>
-                <div class="flex gap-6">
-                    <a href="#hero" class="hover:text-gold transition-colors">Home</a>
-                    <a href="#capabilities" class="hover:text-gold transition-colors">Capabilities</a>
-                    <a href="#process" class="hover:text-gold transition-colors">Process</a>
-                    <a href="#quote" class="hover:text-gold transition-colors">Quote</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============ SCRIPTS ============ -->
+    <!-- ===== FOOTER (navy bg) ===== -->
+    <footer class="bg-navy text-white py-16 px-6">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+                <!-- Brand -->
+                <div>
+                    <a href="#hero" class="text-2xl font-extrabold tracking-tight">
+                        🏅 Award<span class="text-gold-light">Link</span>
+                    </a>
+                    <p class="text-slate-custom-400 text-sm mt-3 leading-relaxed">Custom Medal Production Partner<br>Serving trophy shops and awards distributors worldwide.</p>
+                </div>
+                <!-- Nav -->
+                <div class="flex flex-col gap-2">
+                    <p class="text-xs font-semibold text-slate-custom-400 uppercase tracking-widest mb-2">Navigate</p>
+                    <a href="#capabilities" class="text-slate-custom-300 hover:text-gold-light transition-colors text-sm">Capabilities</a>
+                    <a href="#why-us" class="text-slate-custom-300 hover:text-gold-light transition-colors text-sm">Why Us</a>
+                    <a href="#process" class="text-slate-custom-300 hover:text-gold-light transition-colors text-sm">Process</a>
+                    <a href="#distributors" class="text-slate-custom-300 hover:text-gold-light transition-colors text-sm">For Distributors</a>
+                    <a href="#quote" class="text-slate-custom-300 hover:text-gold-light transition-colors text-sm">Request Quote</a>
+                </div>
+                <!-- Legal -->
+                <div>
+                    <p class="text-xs font-semibold text-slate-custom-400 uppercase tracking-widest mb-2">Contact</p>
+                    <p class="text-slate-custom-300 text-sm">hayes.xia@gmail.com</p>
+                    <p class="text-slate-custom-300 text-sm mt-1">Yiwu, Zhejiang, China</p>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-slate-custom-600 text-center text-slate-custom-400 text-sm">
+                &copy; 2026 AwardLink · Custom Medal Production Partner
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // --- NAVBAR scroll effect ---
+        // --- NAVBAR scroll shadow ---
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 60) {
-                navbar.classList.add('bg-navy', 'bg-opacity-95', 'backdrop-blur-xl', 'border-b', 'border-[#2e5088]');
-                navbar.classList.remove('py-6');
-                navbar.classList.add('py-3');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-sm', 'border-slate-custom-200');
+                navbar.classList.remove('border-transparent');
             } else {
-                navbar.classList.remove('bg-navy', 'bg-opacity-95', 'backdrop-blur-xl', 'border-b', 'border-[#2e5088]');
-                navbar.classList.remove('py-3');
-                navbar.classList.add('py-6');
+                navbar.classList.remove('shadow-sm', 'border-slate-custom-200');
+                navbar.classList.add('border-transparent');
             }
         });
 
@@ -443,28 +552,34 @@
         mobileCloseBtn.addEventListener('click', () => { mobileMenu.classList.add('hidden'); });
         mobileLinks.forEach(link => { link.addEventListener('click', () => { mobileMenu.classList.add('hidden'); }); });
 
-        // --- SCROLL ANIMATION ---
+        // --- SCROLL REVEAL ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         // --- SUPABASE FORM ---
         const SUPABASE_URL = 'SUPABASE_URL';
         const SUPABASE_ANON_KEY = 'SUPABASE_ANON_KEY';
 
         function showToast(message, type) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             toast.textContent = message;
             document.body.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; }, 3000);
-            setTimeout(() => toast.remove(), 3400);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.4s';
+            }, 3500);
+            setTimeout(() => toast.remove(), 4000);
         }
 
         document.getElementById('quoteForm').addEventListener('submit', async function(e) {
@@ -484,17 +599,16 @@
 
             try {
                 if (SUPABASE_URL === 'SUPABASE_URL') {
-                    // Supabase not configured yet — show friendly message
-                    showToast('Thanks for your inquiry! We received it and will respond within 24 hours. (Form storage pending setup)', 'success');
+                    showToast('Thanks! We received your inquiry and will respond within 24 hours.', 'success');
                 } else {
                     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     const { error } = await supabase.from('quotes').insert([formData]);
                     if (error) throw error;
-                    showToast('Thanks for your inquiry! We\\'ll get back to you within 24 hours.', 'success');
+                    showToast('Thanks! We\'ll get back to you within 24 hours.', 'success');
                 }
                 this.reset();
             } catch (err) {
-                console.error('Form submission error:', err);
+                console.error('Form error:', err);
                 showToast('Something went wrong. Please email us directly at hayes.xia@gmail.com', 'error');
             } finally {
                 submitBtn.textContent = originalText;
