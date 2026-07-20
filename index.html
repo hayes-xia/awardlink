@@ -687,7 +687,6 @@
     </div>
 
     <!-- ===== SCRIPTS ===== -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // --- NAVBAR scroll shadow ---
         const navbar = document.getElementById('navbar');
@@ -722,9 +721,9 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // --- SUPABASE FORM ---
-        const SUPABASE_URL = 'https://hyqgzrxmpwtyjehczlup.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_W1ESW2WS52YBm0qSLJFnCg_UYGQBS6B';
+        // --- FORM SUBMISSION (Formspree + mailto fallback) ---
+        // Claim URL: https://formspree.io/claim?name=AwardLink+Quote&project=awardlink&field.name=text,required,maxlength:100&field.email=email,required&field.company=text,maxlength:200&field.message=text,required,maxlength:5000&action.email=hayes.xia@gmail.com
+        const FORMSPREE_ENDPOINT = 'FORMSPREE_ENDPOINT_PLACEHOLDER';
 
         function showToast(message, type) {
             const existing = document.querySelector('.toast');
@@ -757,18 +756,41 @@
             };
 
             try {
-                if (SUPABASE_URL === 'SUPABASE_URL') {
-                    showToast('Thanks! We received your inquiry and will respond within 24 hours.', 'success');
+                if (FORMSPREE_ENDPOINT === 'FORMSPREE_ENDPOINT_PLACEHOLDER') {
+                    // Fallback: construct mailto link with prefilled subject/body
+                    const subject = encodeURIComponent(`Medal Inquiry from ${formData.name}`);
+                    const body = encodeURIComponent(
+                        `Name: ${formData.name}\n` +
+                        `Email: ${formData.email}\n` +
+                        `Company: ${formData.company || 'N/A'}\n\n` +
+                        `Message:\n${formData.message}\n\n` +
+                        `---\nSent from awardlink.co`
+                    );
+                    window.location.href = `mailto:hayes.xia@gmail.com?subject=${subject}&body=${body}`;
+                    showToast('Opening your email app... If it doesn\'t open, email us at hayes.xia@gmail.com', 'success');
                 } else {
-                    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    const { error } = await supabase.from('quotes').insert([formData]);
-                    if (error) throw error;
+                    const res = await fetch(FORMSPREE_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     showToast('Thanks! We\'ll get back to you within 24 hours.', 'success');
                 }
                 this.reset();
             } catch (err) {
                 console.error('Form error:', err);
-                showToast('Something went wrong. Please email us directly at hayes.xia@gmail.com', 'error');
+                // Fallback to mailto on any error
+                const subject = encodeURIComponent(`Medal Inquiry from ${formData.name}`);
+                const body = encodeURIComponent(
+                    `Name: ${formData.name}\n` +
+                    `Email: ${formData.email}\n` +
+                    `Company: ${formData.company || 'N/A'}\n\n` +
+                    `Message:\n${formData.message}\n\n` +
+                    `---\nSent from awardlink.co`
+                );
+                window.location.href = `mailto:hayes.xia@gmail.com?subject=${subject}&body=${body}`;
+                showToast('Could not send via form. Opening email app instead...', 'error');
             } finally {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
