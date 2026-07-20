@@ -721,9 +721,10 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // --- FORM SUBMISSION (Formspree + mailto fallback) ---
-        // Claim URL: https://formspree.io/claim?name=AwardLink+Quote&project=awardlink&field.name=text,required,maxlength:100&field.email=email,required&field.company=text,maxlength:200&field.message=text,required,maxlength:5000&action.email=hayes.xia@gmail.com
-        const FORMSPREE_ENDPOINT = 'FORMSPREE_ENDPOINT_PLACEHOLDER';
+        // --- FORM SUBMISSION (mailto with prefilled subject/body) ---
+        // No third-party dependency. Customer clicks submit → email app opens with prefilled content.
+        // To upgrade to Web3Forms later: get access key from https://web3forms.com,
+        // then replace this function with fetch() POST to https://api.web3forms.com/submit
 
         function showToast(message, type) {
             const existing = document.querySelector('.toast');
@@ -744,57 +745,32 @@
             e.preventDefault();
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Sending...';
+            submitBtn.textContent = 'Opening email...';
             submitBtn.disabled = true;
 
             const formData = {
                 name: this.name.value.trim(),
                 email: this.email.value.trim(),
-                company: this.company.value.trim() || null,
-                message: this.message.value.trim(),
-                source: 'awardlink.co'
+                company: this.company.value.trim() || 'N/A',
+                message: this.message.value.trim()
             };
 
-            try {
-                if (FORMSPREE_ENDPOINT === 'FORMSPREE_ENDPOINT_PLACEHOLDER') {
-                    // Fallback: construct mailto link with prefilled subject/body
-                    const subject = encodeURIComponent(`Medal Inquiry from ${formData.name}`);
-                    const body = encodeURIComponent(
-                        `Name: ${formData.name}\n` +
-                        `Email: ${formData.email}\n` +
-                        `Company: ${formData.company || 'N/A'}\n\n` +
-                        `Message:\n${formData.message}\n\n` +
-                        `---\nSent from awardlink.co`
-                    );
-                    window.location.href = `mailto:hayes.xia@gmail.com?subject=${subject}&body=${body}`;
-                    showToast('Opening your email app... If it doesn\'t open, email us at hayes.xia@gmail.com', 'success');
-                } else {
-                    const res = await fetch(FORMSPREE_ENDPOINT, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify(formData)
-                    });
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    showToast('Thanks! We\'ll get back to you within 24 hours.', 'success');
-                }
-                this.reset();
-            } catch (err) {
-                console.error('Form error:', err);
-                // Fallback to mailto on any error
-                const subject = encodeURIComponent(`Medal Inquiry from ${formData.name}`);
-                const body = encodeURIComponent(
-                    `Name: ${formData.name}\n` +
-                    `Email: ${formData.email}\n` +
-                    `Company: ${formData.company || 'N/A'}\n\n` +
-                    `Message:\n${formData.message}\n\n` +
-                    `---\nSent from awardlink.co`
-                );
-                window.location.href = `mailto:hayes.xia@gmail.com?subject=${subject}&body=${body}`;
-                showToast('Could not send via form. Opening email app instead...', 'error');
-            } finally {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }
+            // Construct mailto link with prefilled subject and body
+            const subject = encodeURIComponent(`Medal Inquiry from ${formData.name}`);
+            const body = encodeURIComponent(
+                `Name: ${formData.name}\n` +
+                `Email: ${formData.email}\n` +
+                `Company: ${formData.company}\n\n` +
+                `Message:\n${formData.message}\n\n` +
+                `---\nSent from awardlink.co`
+            );
+
+            window.location.href = `mailto:hayes.xia@gmail.com?subject=${subject}&body=${body}`;
+            showToast('Opening your email app... If it doesn\'t open, email us directly at hayes.xia@gmail.com', 'success');
+
+            this.reset();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         });
 
         // --- MODAL: open/close ---
